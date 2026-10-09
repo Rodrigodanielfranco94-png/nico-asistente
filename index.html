@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nico</title>
+<style>
+body{margin:0;font-family:-apple-system,sans-serif;background:#07111f;color:#eef6ff}
+main{max-width:520px;margin:0 auto;padding:16px}
+.face{height:280px;border-radius:24px;background:radial-gradient(circle at 50% 30%,#3a271c,#102033);display:flex;align-items:flex-end;justify-content:center;border:1px solid #2b6ea8}
+.face span{font-size:92px;margin-bottom:24px}
+#status{color:#7dffa8;font-size:13px}
+.log{display:flex;flex-direction:column;gap:8px;margin:12px 0;min-height:160px}
+.msg{padding:10px 12px;border-radius:16px}
+.me{align-self:flex-end;background:#14507a}
+.nico{align-self:flex-start;background:#13283f;border:1px solid #24598a}
+form{display:flex;gap:8px}
+input,button{border:0;border-radius:14px;padding:14px;font-size:16px}
+input{flex:1;background:#101c2d;color:#fff;border:1px solid #23486e}
+button{background:#3ec6ff;color:#041018;font-weight:700}
+</style>
+</head>
+<body>
+<main>
+<p id="status">Conectando cerebro</p>
+<div class="face"><span>N</span></div>
+<div class="log" id="log"></div>
+<form id="form"><input id="text" placeholder="Háblale a Nico" /><button>Enviar</button></form>
+</main>
+<script>
+const THINK="https://us-central1-elite-cleaners-app.cloudfunctions.net/pensarNico";
+const log=document.getElementById("log");
+const status=document.getElementById("status");
+function add(role,text){const el=document.createElement("div");el.className="msg "+role;el.textContent=text;log.appendChild(el)}
+function speak(text){if(!window.speechSynthesis)return;const u=new SpeechSynthesisUtterance(text);u.lang="es-MX";speechSynthesis.cancel();speechSynthesis.speak(u)}
+async function ask(text){const r=await fetch(THINK,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({mensaje:text})});const d=await r.json();if(!r.ok||!d.respuesta)throw new Error("sin respuesta");return d.respuesta}
+document.getElementById("form").onsubmit=async e=>{e.preventDefault();const text=document.getElementById("text").value.trim();if(!text)return;add("me",text);document.getElementById("text").value="";status.textContent="Nico está pensando";try{const a=await ask(text);add("nico",a);speak(a);status.textContent="Cerebro conectado"}catch(err){status.textContent="Sin conexión";add("nico",err.message)}};
+ask("Hola Nico").then(a=>{add("nico",a);status.textContent="Cerebro conectado";speak(a)}).catch(()=>{status.textContent="Sin conexión"});
+</script>
+</body>
+</html>
