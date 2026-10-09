@@ -27,9 +27,10 @@ button{background:#3ec6ff;color:#041018;font-weight:700}
 <form id="form"><input id="text" placeholder="Háblale a Nico" /><button>Enviar</button></form>
 </main>
 <script>
-fetch("https://raw.githubusercontent.com/Rodrigodanielfranco94-png/nico-asistente/main/cara.txt")
-  .then(r=>r.text())
-  .then(t=>{document.getElementById("cara").src="data:image/jpeg;base64,"+t.trim();});
+const RAW="https://raw.githubusercontent.com/Rodrigodanielfranco94-png/nico-asistente/main/";
+Promise.all([fetch(RAW+"cara-a.txt").then(r=>r.text()), fetch(RAW+"cara-b.txt").then(r=>r.text())])
+  .then(([a,b])=>{document.getElementById("cara").src="data:image/jpeg;base64,"+a.trim()+b.trim();})
+  .catch(()=>{document.getElementById("status").textContent="Cara no cargó";});
 const THINK="https://us-central1-elite-cleaners-app.cloudfunctions.net/pensarNico";
 const log=document.getElementById("log");
 const status=document.getElementById("status");
