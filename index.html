@@ -7,10 +7,9 @@
 <style>
 body{margin:0;font-family:-apple-system,sans-serif;background:#07111f;color:#eef6ff}
 main{max-width:520px;margin:0 auto;padding:16px}
-.face{height:280px;border-radius:24px;background:radial-gradient(circle at 50% 30%,#3a271c,#102033);display:flex;align-items:flex-end;justify-content:center;border:1px solid #2b6ea8}
-.face span{font-size:92px;margin-bottom:24px}
+img{width:100%;max-height:62vh;object-fit:cover;border-radius:24px;border:1px solid #2b6ea8;display:block;background:#102033}
 #status{color:#7dffa8;font-size:13px}
-.log{display:flex;flex-direction:column;gap:8px;margin:12px 0;min-height:160px}
+.log{display:flex;flex-direction:column;gap:8px;margin:12px 0}
 .msg{padding:10px 12px;border-radius:16px}
 .me{align-self:flex-end;background:#14507a}
 .nico{align-self:flex-start;background:#13283f;border:1px solid #24598a}
@@ -23,11 +22,14 @@ button{background:#3ec6ff;color:#041018;font-weight:700}
 <body>
 <main>
 <p id="status">Conectando cerebro</p>
-<div class="face"><span>N</span></div>
+<img id="cara" alt="Nico" />
 <div class="log" id="log"></div>
 <form id="form"><input id="text" placeholder="Háblale a Nico" /><button>Enviar</button></form>
 </main>
 <script>
+fetch("https://raw.githubusercontent.com/Rodrigodanielfranco94-png/nico-asistente/main/cara.txt")
+  .then(r=>r.text())
+  .then(t=>{document.getElementById("cara").src="data:image/jpeg;base64,"+t.trim();});
 const THINK="https://us-central1-elite-cleaners-app.cloudfunctions.net/pensarNico";
 const log=document.getElementById("log");
 const status=document.getElementById("status");
